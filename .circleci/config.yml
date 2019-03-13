@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:18.09.3-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache curl py-pip
+            pip install docker-squash
+      - run:
+          name: Build Docker image
+          command: |
+            export VCS_REF=$(git rev-parse --short HEAD)
+            docker build --build-arg VCS_REF=$VCS_REF -t unsquashed .
+      - run:
+          name: Squash Docker image
+          command: |
+            docker-squash -t jlivermont/docker-base-sinatra:$CIRCLE_BUILD_NUM unsquashed
+            docker tag jlivermont/docker-base-sinatra:$CIRCLE_BUILD_NUM jlivermont/docker-base-sinatra:latest
+      - run:
+          name: Push Docker image
+          command: |
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+            docker push jlivermont/docker-base-sinatra:${CIRCLE_BUILD_NUM}
+            docker push jlivermont/docker-base-sinatra:latest
+      - run:
+          name: Update build badge
+          command: curl -X POST https://hooks.microbadger.com/images/jlivermont/docker-base/IqXaMveOSlNtsAv7GxMhZw6cLwU=
