@@ -1,7 +1,9 @@
-# docker-base
+# docker-base-sinatra
 
 [![CircleCI](https://circleci.com/gh/jlivermont/docker-base-sinatra/tree/master.svg?style=svg)](https://circleci.com/gh/jlivermont/docker-base-sinatra/tree/master)
 [![](https://images.microbadger.com/badges/image/jlivermont/docker-base-sinatra.svg)](https://microbadger.com/images/jlivermont/docker-base-sinatra "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/jlivermont/docker-base-sinatra.svg)](https://microbadger.com/images/jlivermont/docker-base-sinatra "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/jlivermont/docker-base-sinatra.svg)](https://microbadger.com/images/jlivermont/docker-base-sinatra "Get your own commit badge on microbadger.com")
 
 ## Introduction
 

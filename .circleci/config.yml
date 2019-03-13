@@ -28,5 +28,5 @@ jobs:
             docker push jlivermont/docker-base-sinatra:${CIRCLE_BUILD_NUM}
             docker push jlivermont/docker-base-sinatra:latest
       - run:
-          name: Update build badge
-          command: curl -X POST https://hooks.microbadger.com/images/jlivermont/docker-base/IqXaMveOSlNtsAv7GxMhZw6cLwU=
+          name: Trigger update of build badges
+          command: curl -X POST https://hooks.microbadger.com/images/jlivermont/docker-base-sinatra/ZFKCDPa7vqVWr-PLzFdVzd-ct0Q=
