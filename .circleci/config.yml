@@ -12,21 +12,30 @@ jobs:
             apk add --no-cache curl py-pip
             pip install docker-squash
       - run:
-          name: Build Docker image
+          name: Update base image if triggered by upstream
           command: |
-            export VCS_REF=$(git rev-parse --short HEAD)
-            docker build --build-arg VCS_REF=$VCS_REF -t unsquashed .
+            if [[ -z "$NEW_UPSTREAM_VERSION" ]]; then
+              sed -i -e "s/docker-base:.*$/docker-base:${NEW_UPSTREAM_VERSION}/g" Dockerfile
+              git config user.email "${CIRCLE_PROJECT_REPONAME}@circleci.com"
+              git config user.name "CI"
+              git add Dockerfile
+              git commit -m "Updated Docker base image version to $NEW_UPSTREAM_VERSION"
+              git push https://${GITHUB_TOKEN}@github.com/jlivermont/${CIRCLE_PROJECT_REPONAME}.git master
+            fi
+      - run:
+          name: Build Docker image
+          command:  docker build --build-arg VCS_REF=${CIRCLE_SHA1} -t unsquashed .
       - run:
           name: Squash Docker image
           command: |
-            docker-squash -t jlivermont/docker-base-sinatra:$CIRCLE_BUILD_NUM unsquashed
-            docker tag jlivermont/docker-base-sinatra:$CIRCLE_BUILD_NUM jlivermont/docker-base-sinatra:latest
+            docker-squash -t jlivermont/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BUILD_NUM} unsquashed
+            docker tag jlivermont/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BUILD_NUM} jlivermont/${CIRCLE_PROJECT_REPONAME}:latest
       - run:
           name: Push Docker image
           command: |
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-            docker push jlivermont/docker-base-sinatra:${CIRCLE_BUILD_NUM}
-            docker push jlivermont/docker-base-sinatra:latest
+            docker push jlivermont/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BUILD_NUM}
+            docker push jlivermont/${CIRCLE_PROJECT_REPONAME}:latest
       - run:
           name: Trigger update of build badges
           command: curl -X POST https://hooks.microbadger.com/images/jlivermont/docker-base-sinatra/ZFKCDPa7vqVWr-PLzFdVzd-ct0Q=
