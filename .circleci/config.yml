@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Update base image if triggered by upstream
           command: |
-            if [[ -z "$NEW_UPSTREAM_VERSION" ]]; then
+            if [[ ! -z "$NEW_UPSTREAM_VERSION" ]]; then
               sed -i -e "s/docker-base:.*$/docker-base:${NEW_UPSTREAM_VERSION}/g" Dockerfile
               git config user.email "${CIRCLE_PROJECT_REPONAME}@circleci.com"
               git config user.name "CI"
