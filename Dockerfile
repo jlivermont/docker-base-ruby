@@ -1,4 +1,4 @@
-FROM jlivermont/docker-base:${CIRCLE_BUILD_NUM}
+FROM jlivermont/docker-base:21
 
 ARG VCS_REF
 
