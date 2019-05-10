@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: docker:18.09.3-git
+      - image: docker:18.09.6-git
     steps:
       - checkout
       - setup_remote_docker
