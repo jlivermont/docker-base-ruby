@@ -5,7 +5,7 @@ ARG VCS_REF
 LABEL org.label-schema.vcs-ref=$VCS_REF
 LABEL org.label-schema.vcs-url="https://github.com/jlivermont/docker-base-sinatra"
 
-RUN apk add --no-cache ruby ruby-bundler ruby-rake ruby-rdoc ruby-bigdecimal \
+RUN apk add --no-cache ruby ruby-bundler ruby-rake ruby-rdoc ruby-bigdecimal postgresql-dev \
     && gem install bundler
 WORKDIR /app
 
